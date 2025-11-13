@@ -3,14 +3,10 @@
 # warn_indent: true
 # shareable_constant_value: none
 
-require './lib/utils'
+require_relative 'utils'
 
 
-print "\e[1mReverse polish notation calculator.\e[22m\n" # bold
-
-
-
-def calculate_stack(stack)
+def calculate_rpn(stack)
     if stack.length < 3
         return "Too few arguments in stack."
     end
@@ -44,14 +40,3 @@ def calculate_stack(stack)
 
     return __stack[0]
 end
-
-
-user_input = gets().chomp().strip()
-
-if user_input == "q"
-    exit(0)
-end
-
-result = calculate_stack(user_input.split(" "))
-
-puts (result == result.to_i()) ? result.to_i() : result
