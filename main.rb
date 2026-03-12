@@ -7,10 +7,18 @@ require_relative 'lib/pn'
 require_relative 'lib/rpn'
 
 
-print "\e[1mPolish notation calculator.\e[22m\n" # bold
+
+def is_numeric?(str)
+    return true if str.is_a?(Numeric)
+    return false if !str.is_a?(String)
+    return (Float(str) != nil rescue false)
+end
 
 
-user_input = gets().chomp().strip()
+
+
+
+user_input = gets(">>> ").chomp().strip()
 
 if user_input == "q"
     exit(0)
