@@ -1,42 +1,39 @@
-# encoding: utf-8
-# frozen_string_literal: false
-# warn_indent: true
-# shareable_constant_value: none
-
 require_relative 'utils'
 
 
-def calculate_rpn(stack)
-    if stack.length < 3
-        return "Too few arguments in stack."
+# takes array of values (e.g. [ "1", "2", "+" ])
+# and returns [result, error] as [number (float), string | nil]
+def calculate_rpn(arr)
+    if arr.length < 3
+        return 0, "Too few arguments."
     end
-    if !is_numeric?(stack[0]) || !is_numeric?(stack[1])
-        return "First or second argument in not a number."
+    if !is_numeric?(arr[0]) || !is_numeric?(arr[1])
+        return 0, "RPN : First or second argument is not a number."
     end
 
-    #stack_cpy = Marshal.load(Marshal.dump(stack))
-    __stack = []
+    stack = []
 
-    for v in stack
+    for v in arr
         if is_numeric?(v)
-            __stack.push(v.to_f())
+            stack.push(v.to_f())
         else
             case v
             when "+"
-                __stack.push(__stack.shift() + __stack.shift())
+                stack.push(stack.pop() + stack.pop())
             when "-"
-                __stack.push(__stack.shift() - __stack.shift())
+                stack.push(stack.pop() - stack.pop())
             when "*"
-                __stack.push(__stack.shift() * __stack.shift())
+                stack.push(stack.pop() * stack.pop())
             when "/"
-                __stack.push(__stack.shift() / __stack.shift())
-            when "="
-                return __stack[1]
+                stack.push(stack.pop() / stack.pop())
+            # ???
+            # when "="
+            #     return stack[1], nil
             else
-                return "Unexpected token \"#{ v }\"."
+                return 0, "Unexpected token \"#{v}\"."
             end
         end
     end
 
-    return __stack[0]
+    return stack[0], nil
 end

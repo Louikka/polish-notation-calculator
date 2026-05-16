@@ -1,45 +1,44 @@
-# encoding: utf-8
-# frozen_string_literal: false
-# warn_indent: true
-# shareable_constant_value: none
-
 require_relative 'utils'
 
 
-def calculate_pn(stack)
-    if stack.length < 3
-        return "Too few arguments in stack."
+# takes array of values (e.g. [ "+", "1", "2" ])
+# and returns [result, error] as [number (float), string | nil]
+def calculate_pn(arr)
+    if arr.length < 3
+        return 0, "Too few arguments."
     end
 
-    stack_cpy = Marshal.load(Marshal.dump(stack))
+    stack = []
 
-    stack_cpy.each_with_index do |v, i|
+    arr.each do |v|
         if is_numeric?(v)
-            stack_cpy[i] = v.to_f()
+            stack.push(v.to_f())
+        else
+            stack.push(v)
         end
     end
 
 
-    while stack_cpy.length > 1
-        stack_cpy.each_with_index do |v, i|
+    while stack.length > 1
+        stack.each_with_index do |v, i|
             if [ "+", "-", "*", "/" ].include?(v)
-                if ( is_numeric?(stack_cpy[i + 1]) and is_numeric?(stack_cpy[i + 2]) )
+                if ( is_numeric?(stack[i + 1]) and is_numeric?(stack[i + 2]) )
                     case v
                     when "+"
-                        stack_cpy[i, 3] = stack_cpy[i + 1] + stack_cpy[i + 2]
+                        stack[i, 3] = stack[i + 1] + stack[i + 2]
                     when "-"
-                        stack_cpy[i, 3] = stack_cpy[i + 1] - stack_cpy[i + 2]
+                        stack[i, 3] = stack[i + 1] - stack[i + 2]
                     when "*"
-                        stack_cpy[i, 3] = stack_cpy[i + 1] * stack_cpy[i + 2]
+                        stack[i, 3] = stack[i + 1] * stack[i + 2]
                     when "/"
-                        stack_cpy[i, 3] = stack_cpy[i + 1] / stack_cpy[i + 2]
+                        stack[i, 3] = stack[i + 1] / stack[i + 2]
                     else
-                        return "Somenthing went wrong."
+                        return 0, "Unexpected token \"#{v}\"."
                     end
                 end
             end
         end
     end
 
-    return stack_cpy[0]
+    return stack[0], nil
 end
