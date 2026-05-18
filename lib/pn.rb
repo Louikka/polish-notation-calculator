@@ -22,7 +22,7 @@ def calculate_pn(arr)
     while stack.length > 1
         stack.each_with_index do |v, i|
             if [ "+", "-", "*", "/" ].include?(v)
-                if ( is_numeric?(stack[i + 1]) and is_numeric?(stack[i + 2]) )
+                if is_numeric?(stack[i + 1]) && is_numeric?(stack[i + 2])
                     case v
                     when "+"
                         stack[i, 3] = stack[i + 1] + stack[i + 2]

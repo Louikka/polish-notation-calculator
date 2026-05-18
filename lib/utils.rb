@@ -1,5 +1,6 @@
-def is_numeric?(str)
-    return true if str.is_a?(Numeric)
-    return false if !str.is_a?(String)
-    return (Float(str) != nil rescue false)
+# Determines if value is a number.
+def is_numeric?(value)
+    return true if value.is_a?(Numeric)
+    return false if !value.is_a?(String)
+    return (Float(value) != nil rescue false)
 end
